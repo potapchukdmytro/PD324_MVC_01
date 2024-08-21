@@ -1,10 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using PD324_01.Data;
+using PD324_01.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add repositories
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 // Add database context
 builder.Services.AddDbContext<AppDbContext>(opt =>

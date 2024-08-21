@@ -9,12 +9,12 @@ namespace PD324_01.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ProductRepository _productRepository;
+        private readonly CategoryRepository _productRepository;
 
         public HomeController(ILogger<HomeController> logger, AppDbContext context)
         {
             _logger = logger;
-            _productRepository = new ProductRepository(context);
+            _productRepository = new CategoryRepository(context);
         }
 
         public IActionResult Index()
@@ -23,11 +23,6 @@ namespace PD324_01.Controllers
         }
 
         public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        public IActionResult Test()
         {
             return View();
         }
