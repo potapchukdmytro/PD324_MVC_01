@@ -17,5 +17,10 @@ namespace PD324_01.Repositories
             var model = _context.Categories.FirstOrDefault(p => p.Id == id);
             return model;
         }
+
+        public IEnumerable<Category> GetAll()
+        {
+            return _context.Categories;
+        }
     }
 }

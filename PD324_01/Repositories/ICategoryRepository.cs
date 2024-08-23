@@ -5,5 +5,6 @@ namespace PD324_01.Repositories
     public interface ICategoryRepository
     {
         Category? GetById(int id);
+        IEnumerable<Category> GetAll();
     }
 }

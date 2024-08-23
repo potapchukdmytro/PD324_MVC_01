@@ -18,7 +18,7 @@ namespace PD324_01.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Category> categories = _context.Categories;
+            IEnumerable<Category> categories = _categoryRepository.GetAll();
 
             return View(categories);
         }
