@@ -1,8 +1,11 @@
 ﻿@model PD324_01.Models.ViewModels.CreateProductVM
 
-<h1>Create product</h1>
+<h1>Edit product</h1>
 
-<form method="post" enctype="multipart/form-data" asp-controller="Product" asp-action="Create">
+<form method="post" enctype="multipart/form-data" asp-controller="Product" asp-action="Update">
+    @Html.HiddenFor(m => m.Product.Id)
+    @Html.HiddenFor(m => m.Product.Image)
+
     <div class="form-group" style="width: 40%">
         <label asp-for="Product.Name" class="m-1">Name</label>
         <input asp-for="Product.Name" class="form-control m-1" placeholder="Enter name">
@@ -25,6 +28,6 @@
         <label asp-for="Product.Image" class="m-1">Image</label>
         <input type="file" class="form-control m-1" name="files" />
     </div>
-    <button type="submit" class="btn btn-primary m-2">Submit</button>
+    <button type="submit" class="btn btn-primary m-2">Save</button>
     <a asp-controller="Product" asp-action="Index" class="btn btn-secondary m-2">Back</a>
 </form>

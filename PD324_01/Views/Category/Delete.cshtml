@@ -1,0 +1,12 @@
+﻿@model Category
+
+<h1>Delete category</h1>
+
+<form method="post" asp-controller="Category" asp-action="Delete">
+    <div class="form-group">
+        <label asp-for="Name" class="m-1">Name</label>
+        <input disabled asp-for="Name" class="form-control m-1" placeholder="Enter name">
+    </div>
+    <button type="submit" class="btn btn-primary m-2">Delete</button>
+    <a asp-controller="Category" asp-action="Index" class="btn btn-secondary m-2">Back</a>
+</form>

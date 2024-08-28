@@ -34,13 +34,14 @@ namespace PD324_01.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category model)
         {
-            if(!string.IsNullOrEmpty(model.Name))
+            if(ModelState.IsValid)
             {
                 _context.Categories.Add(model);
                 _context.SaveChanges();
+                return RedirectToAction("Index");
             }
 
-            return RedirectToAction("Index");
+            return View(model);
         }
 
         public IActionResult Update(int? id)
@@ -48,11 +49,17 @@ namespace PD324_01.Controllers
             if(id != null)
             {
                 var model = _categoryRepository.GetById((int)id);
+
+                if (model == null)
+                {
+                    return NotFound();
+                }
+
                 return View(model);
             }
             else
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
         }
 
@@ -60,15 +67,40 @@ namespace PD324_01.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update(Category model)
         {
-            _context.Categories.Update(model);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                _context.Categories.Update(model);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
-            return RedirectToAction("Index");
+            return View(model);
         }
 
+        // GET
         public IActionResult Delete(int? id)
         {
-            var model = _context.Categories.Find(id);
+            if (id != null)
+            {
+                var model = _categoryRepository.GetById((int)id);
+
+                if (model == null)
+                {
+                    return NotFound();
+                }
+
+                return View(model);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(Category model)
+        {
             _context.Remove(model);
             _context.SaveChanges();
 

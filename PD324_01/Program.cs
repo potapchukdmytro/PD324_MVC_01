@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using PD324_01.Data;
 using PD324_01.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using PD324_01.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,11 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlServer("name=ConnectionStrings:DefaultConnection");
 });
+
+// Add fluent validation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<CategoryValidator>();
 
 var app = builder.Build();
 
