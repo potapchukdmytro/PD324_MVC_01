@@ -56,7 +56,7 @@ namespace PD324_01.Controllers
                 if (types[0] == "image")
                 {
                     fileName = Guid.NewGuid().ToString() + "." + types[1];
-                    string imagePath = Path.Combine(rootPath, Data.Constants.FilePaths.ProductsImage, fileName);
+                    string imagePath = Path.Combine(rootPath, Settings.ProductsImage, fileName);
 
                     using (var stream = System.IO.File.Create(imagePath))
                     {
@@ -121,7 +121,7 @@ namespace PD324_01.Controllers
 
                     if(!string.IsNullOrEmpty(oldFileName))
                     {
-                        string oldImagePath = Path.Combine(rootPath, Data.Constants.FilePaths.ProductsImage, oldFileName);
+                        string oldImagePath = Path.Combine(rootPath, Settings.ProductsImage, oldFileName);
 
                         if (System.IO.File.Exists(oldImagePath))
                         {
@@ -129,7 +129,7 @@ namespace PD324_01.Controllers
                         }
                     }
 
-                    string imagePath = Path.Combine(rootPath, Data.Constants.FilePaths.ProductsImage, fileName);
+                    string imagePath = Path.Combine(rootPath, Settings.ProductsImage, fileName);
 
                     using (var stream = System.IO.File.Create(imagePath))
                     {

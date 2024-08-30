@@ -1,0 +1,17 @@
+﻿@model Product
+
+<div class="col-lg-4 filter @Model.Category.Name">
+    <div class="card rounded d-flex flex-column h-100">
+        <div class="card-body row">
+            <div class="col-12">@Model.Name</div>
+            <div class="col-12">@Model.Price грн.</div>
+            <div class="col-12">
+                <span><strong>@Model.Category.Name</strong></span>
+            </div>
+        </div>
+        <img src="@Settings.ProductsImage@Model.Image" class="img-styles img-fluid mx-auto mb-3" alt="@Model.Name"/>
+        <div class="p-1 col-12">
+            <a class="btn btn-secondary form-control" asp-controller="Product" asp-action="Detail" asp-route-Id="@Model.Id">Detail</a>
+        </div>
+    </div>
+</div>

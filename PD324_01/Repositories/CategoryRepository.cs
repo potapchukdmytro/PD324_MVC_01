@@ -1,4 +1,5 @@
-﻿using PD324_01.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PD324_01.Data;
 using PD324_01.Models;
 
 namespace PD324_01.Repositories
@@ -20,7 +21,7 @@ namespace PD324_01.Repositories
 
         public IEnumerable<Category> GetAll()
         {
-            return _context.Categories;
+            return _context.Categories.AsNoTracking();
         }
     }
 }
