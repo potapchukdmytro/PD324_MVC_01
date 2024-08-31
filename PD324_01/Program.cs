@@ -4,6 +4,8 @@ using PD324_01.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using PD324_01.Validators;
+using Microsoft.AspNetCore.Identity;
+using PD324_01.Models.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ builder.Services.AddControllersWithViews();
 
 // Add repositories
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 // Add database context
 builder.Services.AddDbContext<AppDbContext>(opt =>
@@ -23,6 +26,30 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<CategoryValidator>();
+
+// Add identity
+builder.Services.AddIdentity<User, Role>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Password settings.
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+
+    // Lockout settings.
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+
+    // User settings.
+    options.User.AllowedUserNameCharacters =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+});
 
 var app = builder.Build();
 

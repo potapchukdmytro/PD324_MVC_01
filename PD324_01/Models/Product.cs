@@ -14,7 +14,7 @@ namespace PD324_01.Models
         public string Image { get; set; }
 
         [ForeignKey("Category")]
-        public int CatgoryId { get; set; }
+        public int CategoryId { get; set; }
         public Category? Category { get; set; }
     }
 }

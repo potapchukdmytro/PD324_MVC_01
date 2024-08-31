@@ -7,18 +7,16 @@ namespace PD324_01.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly AppDbContext _context;
         private readonly ICategoryRepository _categoryRepository;
 
         public CategoryController(AppDbContext context, ICategoryRepository categoryRepository)
         {
-            _context = context;
             _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Category> categories = _categoryRepository.GetAll();
+            IEnumerable<Category> categories = _categoryRepository.Categories;
 
             return View(categories);
         }
@@ -32,45 +30,11 @@ namespace PD324_01.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Category model)
+        public async Task<IActionResult> Create(Category model)
         {
             if(ModelState.IsValid)
             {
-                _context.Categories.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(model);
-        }
-
-        public IActionResult Update(int? id)
-        {
-            if(id != null)
-            {
-                var model = _categoryRepository.GetById((int)id);
-
-                if (model == null)
-                {
-                    return NotFound();
-                }
-
-                return View(model);
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Update(Category model)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Categories.Update(model);
-                _context.SaveChanges();
+                await _categoryRepository.CreateAsync(model);
                 return RedirectToAction("Index");
             }
 
@@ -78,11 +42,11 @@ namespace PD324_01.Controllers
         }
 
         // GET
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Update(int? id)
         {
-            if (id != null)
+            if(id != null)
             {
-                var model = _categoryRepository.GetById((int)id);
+                var model = await _categoryRepository.GetByIdAsync((int)id);
 
                 if (model == null)
                 {
@@ -97,12 +61,46 @@ namespace PD324_01.Controllers
             }
         }
 
+        // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(Category model)
+        public async Task<IActionResult> Update(Category model)
         {
-            _context.Remove(model);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                await _categoryRepository.UpdateAsync(model);
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
+
+        // GET
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id != null)
+            {
+                var model = await _categoryRepository.GetByIdAsync((int)id);
+
+                if (model == null)
+                {
+                    return NotFound();
+                }
+
+                return View(model);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Category model)
+        {
+            await _categoryRepository.RemoveAsync(model);
 
             return RedirectToAction("Index");
         }

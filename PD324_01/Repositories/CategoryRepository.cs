@@ -4,24 +4,21 @@ using PD324_01.Models;
 
 namespace PD324_01.Repositories
 {
-    public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
     {
         private readonly AppDbContext _context;
 
-        public CategoryRepository(AppDbContext context)
+        public CategoryRepository(AppDbContext context) : base(context)
         {
             _context = context; 
         }
 
-        public Category? GetById(int id)
-        {
-            var model = _context.Categories.FirstOrDefault(p => p.Id == id);
-            return model;
-        }
+        public IEnumerable<Category> Categories => GetAll().AsNoTracking();
 
-        public IEnumerable<Category> GetAll()
+        public async Task<Category?> GetByIdAsync(int id)
         {
-            return _context.Categories.AsNoTracking();
+            var model = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+            return model;
         }
     }
 }
