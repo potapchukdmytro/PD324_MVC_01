@@ -16,5 +16,20 @@ namespace PD324_01.Repositories
         public IEnumerable<Product> Products => GetAll()
             .AsNoTracking()
             .Include(p => p.Category);
+
+        public async Task<Product?> GetByIdAsync(int? id)
+        {
+            if (id == null)
+            {
+                return null;
+            }
+
+            var model = await GetAll()
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return model;
+        }
     }
 }

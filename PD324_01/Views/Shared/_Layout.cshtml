@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+@using PD324_01.Services
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -33,6 +37,21 @@
                         </li>
                     </ul>
                 </div>
+                <div style="flex-grow: 1; text-align: end;">
+                    @if (HttpContextAccessor.HttpContext.Session.Get<List<CartListItem>>(Settings.SessionKeyCart) != null)
+                    {
+                        <a class="nav-link" asp-controller="Cart" asp-action="Index">
+                            @{
+                                var counter = HttpContextAccessor.HttpContext.Session.Get<List<CartListItem>>(Settings.SessionKeyCart).Count();
+                            }
+                            <i class="fa-solid fa-cart-shopping"></i> (@counter)
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="nav-link text-secondary" asp-controller="Cart" asp-action="Index"><i class="fa-solid fa-cart-shopping"></i> (0)</a>
+                    }
+                </div>
             </div>
         </nav>
     </header>
@@ -50,6 +69,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://kit.fontawesome.com/854333f1e2.js" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

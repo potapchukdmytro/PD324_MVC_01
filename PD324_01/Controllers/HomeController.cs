@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PD324_01.Models;
-using PD324_01.Models.Identity;
 using PD324_01.Models.ViewModels;
 using PD324_01.Repositories;
+using PD324_01.Services;
 using System.Diagnostics;
 
 namespace PD324_01.Controllers
@@ -13,14 +12,12 @@ namespace PD324_01.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
-        private readonly UserManager<User> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, ICategoryRepository categoryRepository, IProductRepository productRepository, UserManager<User> userManager)
+        public HomeController(ILogger<HomeController> logger, ICategoryRepository categoryRepository, IProductRepository productRepository)
         {
             _logger = logger;
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
-            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -43,6 +40,88 @@ namespace PD324_01.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var model = new ProductDetailsVM
+            {
+                Product = product,
+                IsInCart = false
+            };
+
+            var cartListItems = GetCartListItems();
+
+            if (cartListItems.Count > 0)
+            {
+                var res = cartListItems.Find(li => li.ProductId == id);
+
+                if (res != null)
+                {
+                    model.IsInCart = true;
+                }
+            }
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            if (await _productRepository.GetByIdAsync(id) == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var cartItem = new CartListItem
+            {
+                ProductId = id
+            };
+
+            var cartListItems = GetCartListItems();
+
+            cartListItems.Add(cartItem);
+
+            HttpContext.Session.Set(Settings.SessionKeyCart, cartListItems);
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult RemoveFromCart(int id)
+        {
+            var cartListItems = GetCartListItems();
+
+            if (cartListItems.Count > 0)
+            {
+                var item = cartListItems.Find(i => i.ProductId == id);
+
+                if (item != null)
+                {
+                    cartListItems.Remove(item);
+                }
+
+                HttpContext.Session.Set(Settings.SessionKeyCart, cartListItems);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        private List<CartListItem> GetCartListItems()
+        {
+            var result = new List<CartListItem>();
+
+            if (HttpContext.Session.Get<List<CartListItem>>(Settings.SessionKeyCart) != null)
+            {
+                result = HttpContext.Session.Get<List<CartListItem>>(Settings.SessionKeyCart);
+            }
+
+            return result;
         }
     }
 }

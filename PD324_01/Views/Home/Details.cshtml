@@ -1,0 +1,47 @@
+﻿@model PD324_01.Models.ViewModels.ProductDetailsVM
+
+<div>
+    <section class="py-5">
+        <div class="container">
+            <div class="row gx-5">
+                <aside class="col-lg-6">
+                    <div class="border rounded-4 mb-3 d-flex justify-content-center">
+                        <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="~/@Settings.ProductsImage@Model.Product.Image">
+                            <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="~/@Settings.ProductsImage@Model.Product.Image" />
+                        </a>
+                    </div>
+                </aside>
+                <main class="col-lg-6">
+                    <div class="ps-lg-3">
+                        <h4 class="title text-dark">
+                            @Model.Product.Name
+                        </h4>
+                        <div class="mb-3">
+                            <span class="h5">Price: @Model.Product.Price&#8372;</span>
+                        </div>
+
+                        <p>
+                            @Model.Product.Description
+                        </p>
+
+                        <div class="row">
+                            <dt class="col-3">Category:</dt>
+                            <dd class="col-9">@Model.Product.Category.Name</dd>
+                        </div>
+
+                        <hr />
+                        <a asp-action="Index" class="btn btn-secondary shadow-0"> Back </a>
+                        @if(Model.IsInCart)
+                        {
+                            <a asp-action="RemoveFromCart" asp-controller="Home" asp-route-Id="@Model.Product.Id" class="btn btn-danger shadow-0"> Remove from cart </a>
+                        }
+                        else
+                        {
+                            <a asp-action="AddToCart" asp-controller="Home" asp-route-Id="@Model.Product.Id" class="btn btn-success shadow-0"> Add to cart </a>
+                        }
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+</div>
