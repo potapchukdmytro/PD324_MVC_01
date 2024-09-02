@@ -40,7 +40,7 @@
                 <div style="flex-grow: 1; text-align: end;">
                     @if (HttpContextAccessor.HttpContext.Session.Get<List<CartListItem>>(Settings.SessionKeyCart) != null)
                     {
-                        <a class="nav-link" asp-controller="Cart" asp-action="Index">
+                        <a class="nav-link text-secondary" asp-controller="Cart" asp-action="Index">
                             @{
                                 var counter = HttpContextAccessor.HttpContext.Session.Get<List<CartListItem>>(Settings.SessionKeyCart).Count();
                             }
