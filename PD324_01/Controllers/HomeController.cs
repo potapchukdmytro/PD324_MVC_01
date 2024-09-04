@@ -57,7 +57,7 @@ namespace PD324_01.Controllers
                 IsInCart = false
             };
 
-            var cartListItems = GetCartListItems();
+            var cartListItems = Session.GetCartListItems(HttpContext);
 
             if (cartListItems.Count > 0)
             {
@@ -84,7 +84,7 @@ namespace PD324_01.Controllers
                 ProductId = id
             };
 
-            var cartListItems = GetCartListItems();
+            var cartListItems = Session.GetCartListItems(HttpContext);
 
             cartListItems.Add(cartItem);
 
@@ -95,7 +95,7 @@ namespace PD324_01.Controllers
 
         public IActionResult RemoveFromCart(int id)
         {
-            var cartListItems = GetCartListItems();
+            var cartListItems = Session.GetCartListItems(HttpContext);
 
             if (cartListItems.Count > 0)
             {
@@ -110,18 +110,6 @@ namespace PD324_01.Controllers
             }
 
             return RedirectToAction("Index");
-        }
-
-        private List<CartListItem> GetCartListItems()
-        {
-            var result = new List<CartListItem>();
-
-            if (HttpContext.Session.Get<List<CartListItem>>(Settings.SessionKeyCart) != null)
-            {
-                result = HttpContext.Session.Get<List<CartListItem>>(Settings.SessionKeyCart);
-            }
-
-            return result;
         }
     }
 }

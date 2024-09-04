@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using PD324_01.Models;
+using System.Text.Json;
 
 namespace PD324_01.Services
 {
@@ -13,6 +14,18 @@ namespace PD324_01.Services
         {
             var data = session.GetString(key);
             return data == null ? default : JsonSerializer.Deserialize<T>(data);
+        }
+
+        public static List<CartListItem> GetCartListItems(HttpContext context)
+        {
+            var result = new List<CartListItem>();
+
+            if (context.Session.Get<List<CartListItem>>(Settings.SessionKeyCart) != null)
+            {
+                result = context.Session.Get<List<CartListItem>>(Settings.SessionKeyCart);
+            }
+
+            return result;
         }
     }
 }

@@ -5,7 +5,7 @@ using PD324_01.Models.Identity;
 
 namespace PD324_01.Data
 {
-    public class AppDbContext 
+    public class AppDbContext
         : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)

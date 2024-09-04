@@ -38,6 +38,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<CategoryValidator>();
 
 // Add identity
 builder.Services.AddIdentity<User, Role>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>
@@ -75,9 +77,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseSession();
 
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
